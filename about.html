@@ -4,31 +4,121 @@
     <meta charset="UTF-8" />
     <title>About Us | MedInteract</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: linear-gradient(to right, #e0eafc, #cfdef3);
+      }
+
+      .fade-in {
+        animation: fadeIn 1s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .glass-box {
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .glass-box:hover {
+        transform: scale(1.015);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+      }
+
+      .tagline {
+        background: linear-gradient(to right, #3b82f6, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .drug-card {
+        transition: all 0.3s ease;
+      }
+
+      .drug-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+      }
+    </style>
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body class="bg-white text-black">
-<!-- Add this inside the <body> tag of all pages -->
+  <body class="font-sans text-black">
+    <!-- Navbar -->
     <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
-        <div class="flex items-center space-x-4">
-          <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
-          <h1 class="text-2xl font-bold">MedInteract</h1>
-        </div>
-        <nav class="space-x-6 text-lg font-medium">
-          <a href="index.html" class="hover:underline">Home</a>
-          <a href="interact.html" class="hover:underline">Checker</a>
-          <a href="about.html" class="hover:underline">About</a>
-          <a href="contact.html" class="hover:underline">Contact</a>
-          <a href="login.html" class="hover:underline">Login</a>
-        </nav>
-      </header>
-      
+      <div class="flex items-center space-x-4">
+        <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
+        <h1 class="text-2xl font-bold">MedInteract</h1>
+      </div>
+      <nav class="space-x-6 text-lg font-medium">
+        <a href="index.html" class="hover:underline">Home</a>
+        <a href="interact.html" class="hover:underline">Checker</a>
+        <a href="chatbot.html" class="hover:underline text-yellow-200 font-semibold">ChatBot</a>
+        <a href="about.html" class="hover:underline">About</a>
+        <a href="contact.html" class="hover:underline">Contact</a>
+        <a href="login.html" class="hover:underline">Login</a>
+      </nav>
+    </header>
 
-    <main class="px-6 py-16 max-w-4xl mx-auto">
-      <h2 class="text-4xl font-bold mb-6">About MedInteract</h2>
-      <p class="text-lg leading-7">
-        MedInteract is a free web tool designed for quick and easy comparison of prescription and over-the-counter drugs.
-        Our mission is to empower individuals to make informed medical decisions by understanding drug interactions, side effects, and active components.
-      </p>
+    <!-- About Content -->
+    <main class="px-6 py-16 max-w-5xl mx-auto fade-in">
+      <section class="glass-box rounded-3xl p-10 mb-12 text-center">
+        <h2 class="text-5xl font-extrabold mb-4 tagline">Empowering Smart Medical Decisions</h2>
+        <p class="text-lg leading-7 text-gray-800">
+          MedInteract is a free, modern drug interaction checker built for everyone — from students to pharmacists. We simplify medication awareness by letting you compare drug interactions, view side effects, and understand active ingredients.
+        </p>
+      </section>
+
+      <!-- Our Values -->
+      <section class="mb-16 fade-in">
+        <h3 class="text-3xl font-bold mb-4">Our Mission</h3>
+        <p class="text-lg leading-7 text-gray-700">
+          We believe that healthcare should be understandable, accessible, and empowering. That’s why we’ve created a space where information isn’t hidden behind jargon or paywalls — just clear answers to your everyday questions.
+        </p>
+      </section>
+
+      <!-- Drug Previews -->
+      <section class="fade-in">
+        <h3 class="text-3xl font-bold mb-6">Explore Popular Drugs</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Example Drug Cards -->
+          <a href="interact.html" class="block p-6 bg-white rounded-xl border border-gray-200 shadow-md drug-card">
+            <h4 class="text-2xl font-semibold text-blue-700 mb-2">Ibuprofen</h4>
+            <p class="text-gray-600 text-sm">Pain relief, inflammation reducer. May cause stomach upset.</p>
+          </a>
+          <a href="interact.html" class="block p-6 bg-white rounded-xl border border-gray-200 shadow-md drug-card">
+            <h4 class="text-2xl font-semibold text-blue-700 mb-2">Paracetamol</h4>
+            <p class="text-gray-600 text-sm">Fever reducer and mild pain relief. Usually well tolerated.</p>
+          </a>
+          <a href="interact.html" class="block p-6 bg-white rounded-xl border border-gray-200 shadow-md drug-card">
+            <h4 class="text-2xl font-semibold text-blue-700 mb-2">Amoxicillin</h4>
+            <p class="text-gray-600 text-sm">Antibiotic for bacterial infections. May cause allergies.</p>
+          </a>
+          <a href="interact.html" class="block p-6 bg-white rounded-xl border border-gray-200 shadow-md drug-card">
+            <h4 class="text-2xl font-semibold text-blue-700 mb-2">Cetirizine</h4>
+            <p class="text-gray-600 text-sm">Allergy relief. May cause drowsiness.</p>
+          </a>
+          <a href="interact.html" class="block p-6 bg-white rounded-xl border border-gray-200 shadow-md drug-card">
+            <h4 class="text-2xl font-semibold text-blue-700 mb-2">Lisinopril</h4>
+            <p class="text-gray-600 text-sm">Used for high blood pressure. Can cause dizziness or cough.</p>
+          </a>
+          <a href="interact.html" class="block p-6 bg-white rounded-xl border border-gray-200 shadow-md drug-card">
+            <h4 class="text-2xl font-semibold text-blue-700 mb-2">Aspirin</h4>
+            <p class="text-gray-600 text-sm">Pain reliever and blood thinner. Risk of bleeding.</p>
+          </a>
+        </div>
+      </section>
     </main>
   </body>
 </html>

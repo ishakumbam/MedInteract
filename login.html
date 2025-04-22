@@ -4,9 +4,60 @@
     <meta charset="UTF-8" />
     <title>Login | MedInteract</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+      }
+
+      .glass-card {
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3);
+      }
+
+      .custom-input::placeholder {
+        color: #9ca3af;
+      }
+
+      .icon-input {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background-color: white;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+      }
+
+      .custom-button {
+        transition: 0.3s ease;
+      }
+
+      .custom-button:hover {
+        background-color: #1e40af;
+        transform: scale(1.03);
+        box-shadow: 0 0 15px rgba(30, 64, 175, 0.4);
+      }
+
+      .fade-in {
+        animation: fadeIn 1s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
-  <body>
+  <body class="font-sans text-black">
     <!-- Navbar -->
     <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
       <div class="flex items-center space-x-4">
@@ -16,48 +67,92 @@
       <nav class="space-x-6 text-lg font-medium">
         <a href="index.html" class="hover:underline">Home</a>
         <a href="interact.html" class="hover:underline">Checker</a>
+        <a href="chatbot.html" class="hover:underline">ChatBot</a>
         <a href="about.html" class="hover:underline">About</a>
         <a href="contact.html" class="hover:underline">Contact</a>
-        <a href="login.html" class="hover:underline">Login</a>
+        <a href="login.html" class="hover:underline text-yellow-200 font-semibold">Login</a>
       </nav>
     </header>
 
     <!-- Login Form -->
-    <main class="flex items-center justify-center min-h-screen bg-zinc-100">
-      <form id="login-form" class="bg-white p-10 rounded-xl shadow-md w-full max-w-sm">
-        <h2 class="text-2xl font-bold mb-5 text-center">Login</h2>
-        <input type="email" id="email" placeholder="Email" class="w-full p-3 border rounded-lg mb-4" required />
-        <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg mb-4" required />
-        <button type="submit" class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg custom-button hover-scale">
-          Sign In
+    <main class="flex items-center justify-center min-h-screen fade-in">
+      <form id="login-form" class="glass-card p-10 rounded-2xl w-full max-w-sm">
+        <h2 class="text-3xl font-bold text-center mb-6">Welcome Back 👋</h2>
+
+        <!-- Email Field -->
+        <div class="icon-input mb-4">
+          <i data-lucide="mail" class="w-5 h-5 text-gray-400"></i>
+          <input type="email" id="email" placeholder="Email" class="w-full custom-input focus:outline-none" required />
+        </div>
+
+        <!-- Password Field -->
+        <div class="icon-input mb-6">
+          <i data-lucide="lock" class="w-5 h-5 text-gray-400"></i>
+          <input type="password" id="password" placeholder="Password" class="w-full custom-input focus:outline-none" required />
+        </div>
+
+        <!-- Button -->
+        <button type="submit" class="w-full px-4 py-3 text-white bg-blue-600 rounded-xl custom-button text-lg font-semibold">
+          🔐 Sign In
         </button>
-        <p class="mt-4 text-sm text-center text-gray-600">Don’t have an account? <a href="#" class="text-blue-500">Register</a></p>
+
+        <!-- OR Divider -->
+        <div class="text-center my-4 text-gray-600 text-sm">OR</div>
+
+        <!-- Google Sign-In Button -->
+        <button
+          type="button"
+          id="google-login"
+          class="w-full px-4 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 font-medium"
+        >
+          🔓 Sign in with Google
+        </button>
 
         <!-- Feedback message -->
-        <p id="login-message" class="mt-4 text-center text-sm font-medium text-green-600 hidden">Login successful!</p>
+        <p id="login-message" class="mt-4 text-center text-sm font-medium hidden"></p>
+
       </form>
     </main>
 
+    <!-- Icons -->
     <script>
-      document.getElementById("login-form").addEventListener("submit", function (e) {
-        e.preventDefault();
+      lucide.createIcons();
+    </script>
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const messageBox = document.getElementById("login-message");
+    <!-- Firebase + Google Login Script -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // Basic mock validation (replace this with real backend auth if needed)
-        if (email === "admin@medinteract.com" && password === "password123") {
-          messageBox.textContent = "Login successful!";
-          messageBox.classList.remove("hidden");
-          messageBox.classList.remove("text-red-600");
-          messageBox.classList.add("text-green-600");
-        } else {
-          messageBox.textContent = "Invalid email or password.";
-          messageBox.classList.remove("hidden");
-          messageBox.classList.remove("text-green-600");
-          messageBox.classList.add("text-red-600");
-        }
+      // ✅ Your Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyD1VObhZ_nsdYWGkCGGNUqpC4OnlVe4W2E",
+        authDomain: "medinteract-80b41.firebaseapp.com",
+        projectId: "medinteract-80b41",
+        storageBucket: "medinteract-80b41.firebasestorage.app",
+        messagingSenderId: "144619044172",
+        appId: "1:144619044172:web:8d082f3260417aeb4a23e9"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      const googleBtn = document.getElementById("google-login");
+
+      googleBtn.addEventListener("click", () => {
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            // Redirect to dashboard
+            window.location.href = "dashboard.html";
+          })
+          .catch((error) => {
+            alert("❌ Google Login failed: " + error.message);
+          });
       });
     </script>
   </body>

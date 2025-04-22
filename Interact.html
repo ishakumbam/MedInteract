@@ -5,10 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Drug Interaction Checker | MedInteract</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: linear-gradient(to right, #e0eafc, #cfdef3);
+      }
+
+      .fade-in {
+        animation: fadeIn 1s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .glass-card {
+        backdrop-filter: blur(14px);
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .glass-card:hover {
+        transform: scale(1.01);
+      }
+
+      .custom-button {
+        transition: all 0.3s ease;
+      }
+
+      .custom-button:hover {
+        background-color: #1d4ed8;
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(29, 78, 216, 0.3);
+      }
+
+      .interaction-box {
+        animation: bounceIn 0.6s ease;
+      }
+
+      @keyframes bounceIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
     <link rel="stylesheet" href="style.css" />
   </head>
 
-  <body class="bg-white text-black font-sans">
+  <body class="text-black font-sans">
     <!-- NAVIGATION BAR -->
     <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
       <div class="flex items-center space-x-4">
@@ -18,6 +75,7 @@
       <nav class="space-x-6 text-lg font-medium">
         <a href="index.html" class="hover:underline">Home</a>
         <a href="interact.html" class="hover:underline text-yellow-200 font-semibold">Checker</a>
+        <a href="chatbot.html" class="hover:underline">ChatBot</a>
         <a href="about.html" class="hover:underline">About</a>
         <a href="contact.html" class="hover:underline">Contact</a>
         <a href="login.html" class="hover:underline">Login</a>
@@ -25,68 +83,72 @@
     </header>
 
     <!-- MAIN SECTION -->
-    <main class="px-6 py-16 flex flex-col items-center">
+    <main class="px-6 py-16 flex flex-col items-center fade-in">
       <!-- Title -->
-      <section class="text-center mb-12 max-w-3xl fade-in">
-        <h2 class="text-5xl font-extrabold mb-4">Drug Interaction Checker</h2>
-        <p class="text-xl">Compare two medications to ensure safety and understand potential interactions.</p>
+      <section class="text-center mb-12 max-w-3xl">
+        <h2 class="text-5xl font-extrabold mb-4">🔍 Drug Interaction Checker</h2>
+        <p class="text-xl text-gray-700">
+          Instantly compare two medications to see if they’re safe to take together and learn their effects.
+        </p>
       </section>
 
       <!-- Input Section -->
       <section class="flex flex-wrap gap-5 justify-center mb-12 w-full max-w-[1032px]">
-        <input type="text" placeholder="Search Drug 1" class="w-[250px] px-6 py-4 rounded-xl bg-zinc-300 bg-opacity-40 focus:outline-blue-600" />
-        <input type="text" placeholder="Search Drug 2" class="w-[250px] px-6 py-4 rounded-xl bg-zinc-300 bg-opacity-40 focus:outline-blue-600" />
-        <button class="px-10 py-4 text-white bg-blue-600 rounded-3xl custom-button hover-scale">Compare</button>
+        <input type="text" placeholder="Search Drug 1" class="w-[250px] px-6 py-4 rounded-xl bg-white bg-opacity-70 shadow-md focus:outline-blue-600" />
+        <input type="text" placeholder="Search Drug 2" class="w-[250px] px-6 py-4 rounded-xl bg-white bg-opacity-70 shadow-md focus:outline-blue-600" />
+        <button class="px-10 py-4 text-white bg-blue-600 rounded-3xl custom-button">
+          Compare
+        </button>
       </section>
 
       <!-- Results Section -->
       <section class="w-full max-w-[1032px]">
         <div class="flex gap-5 max-md:flex-col">
           <!-- Drug 1 Card -->
-          <article class="flex flex-col w-full md:w-1/2 bg-stone-200 rounded-xl p-6 card-shadow fade-in">
+          <article class="flex flex-col w-full md:w-1/2 p-6 rounded-2xl glass-card fade-in">
             <h3 class="text-3xl font-semibold mb-4" id="drug1-title">Drug 1: Paracetamol</h3>
             <div class="mb-3">
               <h4 class="font-medium">Uses:</h4>
-              <ul class="list-disc list-inside" id="drug1-uses">
+              <ul class="list-disc list-inside text-gray-800" id="drug1-uses">
                 <li>Pain relief</li>
                 <li>Fever reduction</li>
               </ul>
             </div>
             <div class="mb-3">
               <h4 class="font-medium">Side Effects:</h4>
-              <ul class="list-disc list-inside" id="drug1-effects">
+              <ul class="list-disc list-inside text-gray-800" id="drug1-effects">
                 <li>Nausea</li>
                 <li>Liver issues</li>
               </ul>
             </div>
             <div>
               <h4 class="font-medium">Components:</h4>
-              <ul class="list-disc list-inside" id="drug1-components">
+              <ul class="list-disc list-inside text-gray-800" id="drug1-components">
                 <li>Paracetamol</li>
               </ul>
             </div>
           </article>
 
           <!-- Drug 2 Card -->
-          <article class="flex flex-col w-full md:w-1/2 bg-zinc-200 rounded-xl p-6 card-shadow fade-in">
+          <article class="flex flex-col w-full md:w-1/2 p-6 rounded-2xl glass-card fade-in">
             <h3 class="text-3xl font-semibold mb-4" id="drug2-title">Drug 2: Ibuprofen</h3>
             <div class="mb-3">
               <h4 class="font-medium">Uses:</h4>
-              <ul class="list-disc list-inside" id="drug2-uses">
+              <ul class="list-disc list-inside text-gray-800" id="drug2-uses">
                 <li>Stomach Pain</li>
                 <li>Treats arthritis</li>
               </ul>
             </div>
             <div class="mb-3">
               <h4 class="font-medium">Side Effects:</h4>
-              <ul class="list-disc list-inside" id="drug2-effects">
+              <ul class="list-disc list-inside text-gray-800" id="drug2-effects">
                 <li>Headache</li>
                 <li>Dizziness</li>
               </ul>
             </div>
             <div>
               <h4 class="font-medium">Components:</h4>
-              <ul class="list-disc list-inside" id="drug2-components">
+              <ul class="list-disc list-inside text-gray-800" id="drug2-components">
                 <li>Ibuprofen</li>
               </ul>
             </div>
@@ -94,7 +156,7 @@
         </div>
 
         <!-- Interaction Message Placeholder -->
-        <div id="interaction-message" class="mt-10 p-6 text-2xl bg-yellow-100 text-yellow-800 rounded-xl fade-in hidden"></div>
+        <div id="interaction-message" class="mt-10 p-6 text-xl bg-yellow-100 text-yellow-800 rounded-xl hidden interaction-box"></div>
       </section>
     </main>
 

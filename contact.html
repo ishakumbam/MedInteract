@@ -4,35 +4,89 @@
     <meta charset="UTF-8" />
     <title>Contact Us | MedInteract</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: linear-gradient(to right, #cfd9df, #e2ebf0);
+      }
+
+      .glass-card {
+        backdrop-filter: blur(16px);
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: 0.3s ease-in-out;
+      }
+
+      .glass-card:hover {
+        transform: scale(1.01);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .form-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+      }
+
+      .fade-in {
+        animation: fadeIn 1s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-   <!-- Add this inside the <body> tag of all pages -->
-<header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
-    <div class="flex items-center space-x-4">
-      <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
-      <h1 class="text-2xl font-bold">MedInteract</h1>
-    </div>
-    <nav class="space-x-6 text-lg font-medium">
-      <a href="index.html" class="hover:underline">Home</a>
-      <a href="interact.html" class="hover:underline">Checker</a>
-      <a href="about.html" class="hover:underline">About</a>
-      <a href="contact.html" class="hover:underline">Contact</a>
-      <a href="login.html" class="hover:underline">Login</a>
-    </nav>
-  </header>
-  
+  <body class="font-sans text-black">
 
-    <main class="px-6 py-16 max-w-3xl mx-auto">
-      <h2 class="text-4xl font-bold mb-6">Contact Us</h2>
-      <form class="space-y-6">
-        <input type="text" placeholder="Your Name" class="w-full p-4 border rounded-xl" required />
-        <input type="email" placeholder="Your Email" class="w-full p-4 border rounded-xl" required />
-        <textarea placeholder="Your Message" rows="5" class="w-full p-4 border rounded-xl"></textarea>
-        <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-xl custom-button hover-scale">
-          Send Message
+    <!-- Navbar -->
+    <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
+      <div class="flex items-center space-x-4">
+        <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
+        <h1 class="text-2xl font-bold">MedInteract</h1>
+      </div>
+      <nav class="space-x-6 text-lg font-medium">
+        <a href="index.html" class="hover:underline">Home</a>
+        <a href="interact.html" class="hover:underline">Checker</a>
+        <a href="chatbot.html" class="hover:underline">ChatBot</a>
+        <a href="about.html" class="hover:underline">About</a>
+        <a href="contact.html" class="hover:underline font-semibold text-yellow-200">Contact</a>
+        <a href="login.html" class="hover:underline">Login</a>
+      </nav>
+    </header>
+
+    <!-- Contact Form Section -->
+    <main class="flex items-center justify-center min-h-screen px-6 py-16 fade-in">
+      <form class="glass-card p-10 rounded-2xl w-full max-w-xl space-y-6" id="contact-form">
+        <h2 class="text-4xl font-bold text-center mb-4">📬 Get In Touch</h2>
+        <p class="text-center text-gray-700 mb-6">We’d love to hear from you. Fill out the form with any questions and our team will get back to you!.</p>
+
+        <input type="text" placeholder="Your Name" class="w-full p-4 border rounded-xl form-input" required />
+        <input type="email" placeholder="Your Email" class="w-full p-4 border rounded-xl form-input" required />
+        <textarea placeholder="Your Message" rows="5" class="w-full p-4 border rounded-xl form-input" required></textarea>
+
+        <button type="submit" class="w-full px-8 py-4 bg-blue-600 text-white rounded-xl text-lg font-semibold hover:scale-105 transition custom-button">
+          ✉️ Send Message
         </button>
+
+        <p id="form-response" class="text-center text-green-600 font-medium hidden mt-4">✅ Your message has been sent!</p>
       </form>
     </main>
+
+    <script>
+      document.getElementById("contact-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const response = document.getElementById("form-response");
+        response.classList.remove("hidden");
+        response.textContent = "✅ Your message has been sent!";
+      });
+    </script>
   </body>
 </html>

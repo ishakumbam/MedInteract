@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard | MedInteract</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #drug-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+      #drug-info > div {
+        width: calc(50% - 0.75rem);
+      }
+    </style>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyD1VObhZ_nsdYWGkCGGNUqpC4OnlVe4W2E",
+        authDomain: "medinteract-80b41.firebaseapp.com",
+        projectId: "medinteract-80b41",
+        storageBucket: "medinteract-80b41.firebasestorage.app",
+        messagingSenderId: "144619044172",
+        appId: "1:144619044172:web:8d082f3260417aeb4a23e9"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      const drugDatabase = {
+    Paracetamol: {
+      uses: ["Pain relief", "Fever reduction"],
+      sideEffects: ["Nausea", "Liver toxicity at high doses"],
+      components: ["Paracetamol"]
+    },
+    Ibuprofen: {
+      uses: ["Pain relief", "Inflammation reduction", "Arthritis"],
+      sideEffects: ["Stomach irritation", "Kidney strain", "Dizziness"],
+      components: ["Ibuprofen"]
+    },
+    Aspirin: {
+      uses: ["Pain relief", "Blood thinning", "Stroke prevention"],
+      sideEffects: ["Stomach ulcers", "Bleeding", "Tinnitus"],
+      components: ["Acetylsalicylic Acid"]
+    },
+    Cetirizine: {
+      uses: ["Allergy relief", "Runny nose", "Itchy eyes"],
+      sideEffects: ["Drowsiness", "Dry mouth"],
+      components: ["Cetirizine Hydrochloride"]
+    },
+    Amoxicillin: {
+      uses: ["Bacterial infection treatment"],
+      sideEffects: ["Rash", "Diarrhea", "Allergic reaction"],
+      components: ["Amoxicillin"]
+    },
+    Lisinopril: {
+      uses: ["High blood pressure", "Heart failure"],
+      sideEffects: ["Cough", "Dizziness", "Low blood pressure"],
+      components: ["Lisinopril"]
+    },
+    Metformin: {
+      uses: ["Type 2 diabetes management"],
+      sideEffects: ["Nausea", "Metallic taste", "Lactic acidosis (rare)"],
+      components: ["Metformin Hydrochloride"]
+    },
+    Atorvastatin: {
+      uses: ["Cholesterol reduction", "Heart disease prevention"],
+      sideEffects: ["Muscle pain", "Liver issues"],
+      components: ["Atorvastatin Calcium"]
+    },
+    Prednisone: {
+      uses: ["Inflammation", "Allergic disorders", "Autoimmune conditions"],
+      sideEffects: ["Weight gain", "Mood swings", "Weakened immunity"],
+      components: ["Prednisone"]
+    },
+    Sertraline: {
+      uses: ["Depression", "Anxiety", "OCD", "PTSD"],
+      sideEffects: ["Sexual dysfunction", "Insomnia", "Nausea"],
+      components: ["Sertraline Hydrochloride"]
+    }
+  };
+
+      let addedDrugs = [];
+
+      window.onload = () => {
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            document.getElementById("user-name").textContent = user.displayName;
+          } else {
+            window.location.href = "login.html";
+          }
+        });
+
+        document.getElementById("logout-btn").addEventListener("click", () => {
+          signOut(auth).then(() => {
+            window.location.href = "login.html";
+          });
+        });
+
+        document.getElementById("drug-form").addEventListener("submit", (e) => {
+          e.preventDefault();
+          const name = document.getElementById("drug-name").value.trim();
+          const formatted = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+          const data = drugDatabase[formatted];
+
+          if (data) {
+            addedDrugs.push({ name: formatted, ...data });
+            renderDrugs();
+            document.getElementById("drug-name").value = "";
+          } else {
+            document.getElementById("drug-info").innerHTML = `<p class='text-red-600 mt-4'>Drug not found in database.</p>`;
+          }
+        });
+      };
+
+      function renderDrugs() {
+        const container = document.getElementById("drug-info");
+        container.innerHTML = "";
+        addedDrugs.forEach((drug, index) => {
+          const card = document.createElement("div");
+          card.className = "bg-white p-6 rounded-xl shadow-md cursor-move";
+          card.setAttribute("draggable", "true");
+          card.setAttribute("data-index", index);
+
+          card.innerHTML = `
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="text-2xl font-bold">${drug.name}</h3>
+              <button onclick="removeDrug(${index})" class="text-red-600 hover:text-red-800 font-semibold">Remove</button>
+            </div>
+            <p><strong>Uses:</strong> ${drug.uses.join(", ")}</p>
+            <p><strong>Side Effects:</strong> ${drug.sideEffects.join(", ")}</p>
+            <p><strong>Components:</strong> ${drug.components.join(", ")}</p>
+          `;
+
+          card.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", index);
+          });
+
+          card.addEventListener("dragover", (e) => e.preventDefault());
+
+          card.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const fromIndex = e.dataTransfer.getData("text/plain");
+            const toIndex = card.getAttribute("data-index");
+            const temp = addedDrugs[fromIndex];
+            addedDrugs[fromIndex] = addedDrugs[toIndex];
+            addedDrugs[toIndex] = temp;
+            renderDrugs();
+          });
+
+          container.appendChild(card);
+        });
+      }
+
+      window.removeDrug = function(index) {
+        addedDrugs.splice(index, 1);
+        renderDrugs();
+      };
+    </script>
+  </head>
+  <body class="bg-gradient-to-r from-indigo-100 to-blue-100 min-h-screen text-black font-sans">
+    <!-- Navbar -->
+    <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
+      <div class="flex items-center space-x-4">
+        <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
+        <h1 class="text-2xl font-bold">MedInteract</h1>
+      </div>
+      <nav class="space-x-6 text-lg font-medium">
+        <a href="index.html" class="hover:underline">Home</a>
+        <a href="interact.html" class="hover:underline">Checker</a>
+        <a href="chatbot.html" class="hover:underline">ChatBot</a>
+        <a href="about.html" class="hover:underline">About</a>
+        <a href="contact.html" class="hover:underline">Contact</a>
+        <a href="login.html" class="hover:underline">Login</a>
+        <button id="logout-btn" class="ml-4 bg-white text-blue-600 px-3 py-1 rounded-lg font-semibold">Logout</button>
+      </nav>
+    </header>
+
+    <main class="px-6 py-12 max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold mb-2">Welcome, <span id="user-name"></span>! 👋</h2>
+      <p class="mb-6 text-gray-700">Type the name of a drug you're currently taking to view key info. You can add multiple and view all at once. Drag to reorder or remove as needed.</p>
+      <form id="drug-form" class="flex flex-col sm:flex-row gap-4">
+        <input id="drug-name" type="text" placeholder="e.g. Ibuprofen" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-blue-600" required />
+        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">Add Drug</button>
+      </form>
+
+      <div id="drug-info" class="mt-8"></div>
+    </main>
+  </body>
+</html>

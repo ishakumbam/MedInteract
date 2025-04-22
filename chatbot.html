@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ask MedInteract | Chatbot</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <style>
+      body {
+        background: radial-gradient(circle at top left, #dfe9f3, #ffffff);
+      }
+      .chat-window {
+        height: 500px;
+        overflow-y: auto;
+        background: #ffffff;
+        padding: 1rem;
+        border-radius: 1rem;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      }
+      .user-msg, .bot-msg {
+        max-width: 75%;
+        padding: 0.75rem 1rem;
+        margin: 0.5rem 0;
+        border-radius: 1rem;
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+      .user-msg {
+        background-color: #2563eb;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 0;
+      }
+      .bot-msg {
+        background-color: #f3f4f6;
+        color: #111827;
+        align-self: flex-start;
+        border-bottom-left-radius: 0;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen font-sans text-gray-800">
+    <!-- Navbar -->
+    <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
+      <div class="flex items-center space-x-4">
+        <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
+        <h1 class="text-2xl font-bold">MedInteract</h1>
+      </div>
+      <nav class="space-x-6 text-lg font-medium">
+        <a href="index.html" class="hover:underline">Home</a>
+        <a href="interact.html" class="hover:underline">Checker</a>
+        <a href="about.html" class="hover:underline">About</a>
+        <a href="contact.html" class="hover:underline">Contact</a>
+        <a href="login.html" class="hover:underline">Login</a>
+        <a href="chatbot.html" class="hover:underline">Chatbot</a>
+      </nav>
+    </header>
+
+    <!-- Chat UI -->
+    <main class="flex items-center justify-center px-4 py-16">
+      <div class="w-full max-w-3xl flex flex-col gap-4">
+        <h2 class="text-3xl font-bold text-center">💬 Ask MedInteract</h2>
+
+        <div id="chat-window" class="chat-window flex flex-col"></div>
+
+        <div class="flex gap-2">
+          <textarea id="chat-input" placeholder="Type your message here..." rows="2" class="flex-1 p-3 border border-gray-300 rounded-xl resize-none focus:outline-blue-500"></textarea>
+          <button id="chat-send" class="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition">Send</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Chat Logic -->
+    <script>
+      const sendBtn = document.getElementById("chat-send");
+      const chatWindow = document.getElementById("chat-window");
+      const inputField = document.getElementById("chat-input");
+    
+      sendBtn.addEventListener("click", async () => {
+        const prompt = inputField.value.trim();
+        if (!prompt) return;
+    
+        appendMessage(prompt, "user-msg");
+        inputField.value = "";
+        scrollToBottom();
+    
+        appendMessage("Thinking... 🤖", "bot-msg", true);
+    
+        try {
+          const res = await fetch("http://localhost:3000/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt }),
+          });
+    
+          const data = await res.json();
+          removeLastBotMessage();
+          appendMessage(data.reply || "❌ No reply received.", "bot-msg");
+          scrollToBottom();
+        } catch (err) {
+          removeLastBotMessage();
+          appendMessage("❌ Error: " + err.message, "bot-msg");
+        }
+      });
+    
+      // ⌨️ Enter key to send
+      inputField.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendBtn.click();
+        }
+      });
+    
+      function appendMessage(text, className, temp = false) {
+        const div = document.createElement("div");
+        div.className = className;
+        div.textContent = text;
+        div.dataset.temp = temp;
+        chatWindow.appendChild(div);
+      }
+    
+      function removeLastBotMessage() {
+        const messages = [...chatWindow.children];
+        const lastTemp = messages.reverse().find(msg => msg.dataset.temp === "true");
+        if (lastTemp) chatWindow.removeChild(lastTemp);
+      }
+    
+      function scrollToBottom() {
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      }
+    </script>
+    
+  </body>
+</html>
