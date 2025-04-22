@@ -1,0 +1,78 @@
+/* Custom styles for Drug Interaction Checker */
+
+/* Global styles */
+body {
+    font-family: "Arial", sans-serif;
+    color: #000000;
+    background-color: #ffffff;
+  }
+  
+  /* Custom animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  /* Custom hover effects */
+  .hover-scale:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  
+  /* Custom focus styles for better accessibility */
+  input:focus,
+  button:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Custom card shadow */
+  .card-shadow {
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.1),
+      0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Custom button styles */
+  .custom-button {
+    transition: all 0.3s ease;
+  }
+  
+  .custom-button:hover {
+    background-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .responsive-text {
+      font-size: 90%;
+    }
+  }
+  

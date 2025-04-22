@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Contact Us | MedInteract</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+   <!-- Add this inside the <body> tag of all pages -->
+<header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
+    <div class="flex items-center space-x-4">
+      <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
+      <h1 class="text-2xl font-bold">MedInteract</h1>
+    </div>
+    <nav class="space-x-6 text-lg font-medium">
+      <a href="index.html" class="hover:underline">Home</a>
+      <a href="interact.html" class="hover:underline">Checker</a>
+      <a href="about.html" class="hover:underline">About</a>
+      <a href="contact.html" class="hover:underline">Contact</a>
+      <a href="login.html" class="hover:underline">Login</a>
+    </nav>
+  </header>
+  
+
+    <main class="px-6 py-16 max-w-3xl mx-auto">
+      <h2 class="text-4xl font-bold mb-6">Contact Us</h2>
+      <form class="space-y-6">
+        <input type="text" placeholder="Your Name" class="w-full p-4 border rounded-xl" required />
+        <input type="email" placeholder="Your Email" class="w-full p-4 border rounded-xl" required />
+        <textarea placeholder="Your Message" rows="5" class="w-full p-4 border rounded-xl"></textarea>
+        <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-xl custom-button hover-scale">
+          Send Message
+        </button>
+      </form>
+    </main>
+  </body>
+</html>

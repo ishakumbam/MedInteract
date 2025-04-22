@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drug Interaction Checker | MedInteract</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="bg-white text-black font-sans">
+    <!-- NAVIGATION BAR -->
+    <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
+      <div class="flex items-center space-x-4">
+        <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
+        <h1 class="text-2xl font-bold">MedInteract</h1>
+      </div>
+      <nav class="space-x-6 text-lg font-medium">
+        <a href="index.html" class="hover:underline">Home</a>
+        <a href="interact.html" class="hover:underline text-yellow-200 font-semibold">Checker</a>
+        <a href="about.html" class="hover:underline">About</a>
+        <a href="contact.html" class="hover:underline">Contact</a>
+        <a href="login.html" class="hover:underline">Login</a>
+      </nav>
+    </header>
+
+    <!-- MAIN SECTION -->
+    <main class="px-6 py-16 flex flex-col items-center">
+      <!-- Title -->
+      <section class="text-center mb-12 max-w-3xl fade-in">
+        <h2 class="text-5xl font-extrabold mb-4">Drug Interaction Checker</h2>
+        <p class="text-xl">Compare two medications to ensure safety and understand potential interactions.</p>
+      </section>
+
+      <!-- Input Section -->
+      <section class="flex flex-wrap gap-5 justify-center mb-12 w-full max-w-[1032px]">
+        <input type="text" placeholder="Search Drug 1" class="w-[250px] px-6 py-4 rounded-xl bg-zinc-300 bg-opacity-40 focus:outline-blue-600" />
+        <input type="text" placeholder="Search Drug 2" class="w-[250px] px-6 py-4 rounded-xl bg-zinc-300 bg-opacity-40 focus:outline-blue-600" />
+        <button class="px-10 py-4 text-white bg-blue-600 rounded-3xl custom-button hover-scale">Compare</button>
+      </section>
+
+      <!-- Results Section -->
+      <section class="w-full max-w-[1032px]">
+        <div class="flex gap-5 max-md:flex-col">
+          <!-- Drug 1 Card -->
+          <article class="flex flex-col w-full md:w-1/2 bg-stone-200 rounded-xl p-6 card-shadow fade-in">
+            <h3 class="text-3xl font-semibold mb-4" id="drug1-title">Drug 1: Paracetamol</h3>
+            <div class="mb-3">
+              <h4 class="font-medium">Uses:</h4>
+              <ul class="list-disc list-inside" id="drug1-uses">
+                <li>Pain relief</li>
+                <li>Fever reduction</li>
+              </ul>
+            </div>
+            <div class="mb-3">
+              <h4 class="font-medium">Side Effects:</h4>
+              <ul class="list-disc list-inside" id="drug1-effects">
+                <li>Nausea</li>
+                <li>Liver issues</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium">Components:</h4>
+              <ul class="list-disc list-inside" id="drug1-components">
+                <li>Paracetamol</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Drug 2 Card -->
+          <article class="flex flex-col w-full md:w-1/2 bg-zinc-200 rounded-xl p-6 card-shadow fade-in">
+            <h3 class="text-3xl font-semibold mb-4" id="drug2-title">Drug 2: Ibuprofen</h3>
+            <div class="mb-3">
+              <h4 class="font-medium">Uses:</h4>
+              <ul class="list-disc list-inside" id="drug2-uses">
+                <li>Stomach Pain</li>
+                <li>Treats arthritis</li>
+              </ul>
+            </div>
+            <div class="mb-3">
+              <h4 class="font-medium">Side Effects:</h4>
+              <ul class="list-disc list-inside" id="drug2-effects">
+                <li>Headache</li>
+                <li>Dizziness</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium">Components:</h4>
+              <ul class="list-disc list-inside" id="drug2-components">
+                <li>Ibuprofen</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <!-- Interaction Message Placeholder -->
+        <div id="interaction-message" class="mt-10 p-6 text-2xl bg-yellow-100 text-yellow-800 rounded-xl fade-in hidden"></div>
+      </section>
+    </main>
+
+    <!-- JS -->
+    <script src="interact.js"></script>
+  </body>
+</html>
