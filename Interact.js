@@ -119,28 +119,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 🔄 INTERACTION MESSAGES
   const interactionMessages = {
-    "Paracetamol-Ibuprofen":
-      "Safe for short-term combined use. Monitor liver and kidney function if used regularly.",
-    "Ibuprofen-Aspirin":
-      "Avoid concurrent use for pain relief. Ibuprofen may interfere with aspirin’s heart protection benefits.",
-    "Aspirin-Paracetamol":
-      "Generally safe together. May increase stomach discomfort in sensitive individuals.",
-    "Ibuprofen-Lisinopril":
-      "Use with caution. May reduce kidney function and blunt blood pressure control.",
-    "Ibuprofen-Metformin":
-      "Monitor for kidney function, especially in elderly or dehydrated patients.",
-    "Lisinopril-Metformin":
-      "Safe, but both drugs affect the kidneys. Monitor function if used long-term.",
-    "Amoxicillin-Ibuprofen":
-      "Safe for treating infections with pain or fever. No major interaction.",
-    "Sertraline-Ibuprofen":
-      "May increase risk of bleeding. Use together cautiously and monitor for bruising.",
-    "Prednisone-Ibuprofen":
-      "Avoid long-term combined use. Increased risk of stomach ulcers and GI bleeding.",
-    "Sertraline-Aspirin":
-      "Can increase bleeding risk. Use with medical supervision.",
-    "Cetirizine-Paracetamol":
-      "No significant interaction. Often combined safely in cold/allergy relief."
+    "Paracetamol-Ibuprofen": "Safe for short-term combined use. Monitor liver and kidney function if used regularly.",
+    "Ibuprofen-Aspirin": "Avoid concurrent use for pain relief. Ibuprofen may interfere with aspirin’s heart protection benefits.",
+    "Aspirin-Paracetamol": "Generally safe together. May increase stomach discomfort in sensitive individuals.",
+    "Ibuprofen-Lisinopril": "Use with caution. May reduce kidney function and blunt blood pressure control.",
+    "Ibuprofen-Metformin": "Monitor kidney function, especially in elderly or dehydrated patients.",
+    "Lisinopril-Metformin": "Safe, but both drugs affect kidneys. Monitor function if used long-term.",
+    "Amoxicillin-Ibuprofen": "Safe for treating infections with pain or fever. No major interaction.",
+    "Sertraline-Ibuprofen": "May increase bleeding risk. Use cautiously and monitor for bruising.",
+    "Prednisone-Ibuprofen": "Avoid long-term combined use. Increased risk of stomach ulcers and GI bleeding.",
+    "Sertraline-Aspirin": "Can increase bleeding risk. Use with medical supervision.",
+    "Cetirizine-Paracetamol": "No significant interaction. Often combined safely in cold/allergy relief.",
+    "Azithromycin-Amoxicillin": "No significant interaction. Both can be used together under guidance.",
+    "Metformin-Omeprazole": "May affect vitamin B12 absorption. Monitor with long-term use.",
+    "Lisinopril-Furosemide": "Can significantly lower blood pressure. Monitor electrolytes and kidney function.",
+    "Amlodipine-Lisinopril": "Often prescribed together for blood pressure control. Monitor for low BP.",
+    "Atorvastatin-Amlodipine": "No major interaction. Sometimes prescribed together for heart health.",
+    "Gabapentin-Sertraline": "May cause increased sedation or dizziness. Use cautiously.",
+    "Prednisone-Omeprazole": "Omeprazole may protect stomach from prednisone-related irritation.",
+    "Albuterol-Prednisone": "Safe and commonly used together in asthma flare-ups.",
+    "Metformin-Furosemide": "Increased risk of dehydration and kidney issues. Monitor closely.",
+    "Levothyroxine-Omeprazole": "Omeprazole may reduce levothyroxine absorption. Take at different times.",
+    "Cetirizine-Sertraline": "May increase drowsiness. Avoid alcohol and monitor sedation levels.",
+    "Aspirin-Losartan": "May reduce the effectiveness of Losartan and affect kidney function.",
+    "Hydrochlorothiazide-Lisinopril": "Common combination. Monitor blood pressure and potassium levels.",
+    "Simvastatin-Amiodarone": "Increased risk of muscle toxicity. Avoid high simvastatin doses.",
+    "Gabapentin-Metformin": "No major interaction. Monitor for dizziness or fatigue.",
+    "Azithromycin-Atorvastatin": "May increase risk of muscle pain. Monitor symptoms if used together.",
+    "Paracetamol-Atorvastatin": "No known interaction. Safe for use together.",
+    "Furosemide-Digoxin": "Increased risk of digoxin toxicity. Monitor potassium and digoxin levels.",
+    "Drug21-Drug22": "Placeholder note: review specific components for interaction guidance.",
+    "Drug23-Drug24": "Placeholder note: monitor patient history when combining new medications.",
+    "Drug25-Drug26": "Unknown interaction. Consult a pharmacist for patient-specific advice.",
+    "Drug27-Drug28": "Use clinical judgment. Interaction risk may depend on dosing and duration.",
+    "Drug29-Drug30": "Check for potential duplicate therapeutic effects before combining.",
   };
   
 
