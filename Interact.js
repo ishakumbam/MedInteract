@@ -53,8 +53,68 @@ document.addEventListener("DOMContentLoaded", function () {
       uses: ["Depression", "Anxiety", "OCD", "PTSD"],
       sideEffects: ["Sexual dysfunction", "Insomnia", "Nausea"],
       components: ["Sertraline Hydrochloride"]
-    }
+    },
+    Azithromycin: {
+      uses: ["Bacterial infections", "Respiratory infections"],
+      sideEffects: ["Diarrhea", "Nausea", "Abdominal pain"],
+      components: ["Azithromycin"]
+    },
+    Levothyroxine: {
+      uses: ["Hypothyroidism"],
+      sideEffects: ["Hair loss", "Weight changes", "Nervousness"],
+      components: ["Levothyroxine Sodium"]
+    },
+    Amlodipine: {
+      uses: ["High blood pressure", "Chest pain (angina)"],
+      sideEffects: ["Swelling", "Fatigue", "Flushing"],
+      components: ["Amlodipine Besylate"]
+    },
+    Omeprazole: {
+      uses: ["GERD", "Stomach ulcers"],
+      sideEffects: ["Headache", "Nausea", "Gas"],
+      components: ["Omeprazole"]
+    },
+    Simvastatin: {
+      uses: ["High cholesterol", "Heart disease prevention"],
+      sideEffects: ["Muscle pain", "Liver damage"],
+      components: ["Simvastatin"]
+    },
+    Hydrochlorothiazide: {
+      uses: ["High blood pressure", "Fluid retention"],
+      sideEffects: ["Dizziness", "Increased urination", "Low potassium"],
+      components: ["Hydrochlorothiazide"]
+    },
+    Losartan: {
+      uses: ["High blood pressure", "Kidney protection in diabetes"],
+      sideEffects: ["Dizziness", "Back pain", "Cold symptoms"],
+      components: ["Losartan Potassium"]
+    },
+    Gabapentin: {
+      uses: ["Seizures", "Nerve pain"],
+      sideEffects: ["Drowsiness", "Dizziness", "Fatigue"],
+      components: ["Gabapentin"]
+    },
+    Albuterol: {
+      uses: ["Asthma", "COPD"],
+      sideEffects: ["Shakiness", "Nervousness", "Headache"],
+      components: ["Albuterol Sulfate"]
+    },
+    Furosemide: {
+      uses: ["Fluid retention", "High blood pressure"],
+      sideEffects: ["Frequent urination", "Dizziness", "Dehydration"],
+      components: ["Furosemide"]
+    },
   };
+  
+  // Placeholder entries for additional 40 drugs
+  for (let i = 21; i <= 60; i++) {
+    drugDatabase[`Drug${i}`] = {
+      uses: [`Use case ${i}`],
+      sideEffects: [`Side effect ${i}A`, `Side effect ${i}B`],
+      components: [`Component${i}`]
+    };
+  }
+  
   
 
   // 🔄 INTERACTION MESSAGES
