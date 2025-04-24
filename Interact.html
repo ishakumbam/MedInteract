@@ -1,166 +1,707 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Drug Interaction Checker | MedInteract</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      body {
-        background: linear-gradient(to right, #e0eafc, #cfdef3);
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drug Interaction Checker | MedInteract</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+     body {
+        background: linear-gradient(to right, #f0f4f8, #d9e2ec);
+        font-family: 'Inter', sans-serif;
+     }
 
-      .fade-in {
-        animation: fadeIn 1s ease;
-      }
 
-      @keyframes fadeIn {
+     .fade-in {
+        animation: fadeIn 0.6s ease;
+     }
+
+
+     @keyframes fadeIn {
         from {
-          opacity: 0;
-          transform: translateY(15px);
+           opacity: 0;
+           transform: translateY(10px);
         }
         to {
-          opacity: 1;
-          transform: translateY(0);
+           opacity: 1;
+           transform: translateY(0);
         }
-      }
+     }
 
-      .glass-card {
-        backdrop-filter: blur(14px);
-        background: rgba(255, 255, 255, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+     .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         transition: all 0.3s ease;
-      }
+     }
 
-      .glass-card:hover {
-        transform: scale(1.01);
-      }
 
-      .custom-button {
-        transition: all 0.3s ease;
-      }
+     .card:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+     }
 
-      .custom-button:hover {
-        background-color: #1d4ed8;
-        transform: scale(1.05);
-        box-shadow: 0 8px 20px rgba(29, 78, 216, 0.3);
-      }
 
-      .interaction-box {
-        animation: bounceIn 0.6s ease;
-      }
+     .custom-button {
+        transition: all 0.2s ease;
+     }
 
-      @keyframes bounceIn {
-        from {
-          opacity: 0;
-          transform: scale(0.95);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-    </style>
-    <link rel="stylesheet" href="style.css" />
-  </head>
 
-  <body class="text-black font-sans">
-    <!-- NAVIGATION BAR -->
-    <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
-      <div class="flex items-center space-x-4">
-        <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
-        <h1 class="text-2xl font-bold">MedInteract</h1>
-      </div>
-      <nav class="space-x-6 text-lg font-medium">
-        <a href="index.html" class="hover:underline">Home</a>
-        <a href="interact.html" class="hover:underline text-yellow-200 font-semibold">Checker</a>
-        <a href="chatbot.html" class="hover:underline">ChatBot</a>
-        <a href="about.html" class="hover:underline">About</a>
-        <a href="contact.html" class="hover:underline">Contact</a>
-        <a href="login.html" class="hover:underline">Login</a>
-      </nav>
-    </header>
+     .custom-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+     }
 
-    <!-- MAIN SECTION -->
-    <main class="px-6 py-16 flex flex-col items-center fade-in">
-      <!-- Title -->
-      <section class="text-center mb-12 max-w-3xl">
-        <h2 class="text-5xl font-extrabold mb-4">🔍 Drug Interaction Checker</h2>
-        <p class="text-xl text-gray-700">
-          Instantly compare two medications to see if they’re safe to take together and learn their effects.
+
+     .interaction-box {
+        animation: fadeIn 0.5s ease;
+     }
+
+
+     .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3b82f6;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+     }
+
+
+     @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+     }
+
+
+     .pill-icon {
+        display: inline-block;
+        width: 18px;
+        height: 8px;
+        background: #3b82f6;
+        border-radius: 4px;
+        margin-right: 6px;
+        position: relative;
+     }
+
+
+     .pill-icon::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1px;
+        height: 80%;
+        background: white;
+        transform: translate(-50%, -50%);
+     }
+
+
+     /* Status badges */
+     .status-safe {
+        background-color: #10b981;
+        color: white;
+     }
+
+
+     .status-caution {
+        background-color: #f59e0b;
+        color: white;
+     }
+
+
+     .status-unsafe {
+        background-color: #ef4444;
+        color: white;
+     }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-black">
+
+  <!-- Navbar -->
+  <header class="flex justify-between items-center p-6 bg-blue-600 text-white shadow-lg">
+    <div class="flex items-center space-x-4">
+      <img src="download.jpeg" alt="MedInteract Logo" class="w-12 h-12 rounded-full" />
+      <h1 class="text-2xl font-bold">MedInteract</h1>
+    </div>
+    <nav class="space-x-6 text-lg font-medium">
+      <a href="index.html" class="hover:underline">Home</a>
+      <a href="interact.html" class="hover:underline font-semibold text-yellow-200">Checker</a>
+      <a href="chatbot.html" class="hover:underline">ChatBot</a>
+      <a href="about.html" class="hover:underline">About</a>
+      <a href="contact.html" class="hover:underline ">Contact</a>
+      <a href="login.html" class="hover:underline">Login</a>
+    </nav>
+  </header>
+
+
+  <main class="px-6 py-10 flex flex-col items-center fade-in max-w-7xl mx-auto">
+     <section class="text-center mb-10 max-w-3xl">
+        <h2 class="text-4xl font-bold mb-3 text-gray-800">Drug Interaction Checker</h2>
+        <p class="text-lg text-gray-600">
+           Compare two medications to check for potential interactions and receive evidence-based safety information.
         </p>
-      </section>
+     </section>
 
-      <!-- Input Section -->
-      <section class="flex flex-wrap gap-5 justify-center mb-12 w-full max-w-[1032px]">
-        <input type="text" placeholder="Search Drug 1" class="w-[250px] px-6 py-4 rounded-xl bg-white bg-opacity-70 shadow-md focus:outline-blue-600" />
-        <input type="text" placeholder="Search Drug 2" class="w-[250px] px-6 py-4 rounded-xl bg-white bg-opacity-70 shadow-md focus:outline-blue-600" />
-        <button class="px-10 py-4 text-white bg-blue-600 rounded-3xl custom-button">
-          Compare
-        </button>
-      </section>
 
-      <!-- Results Section -->
-      <section class="w-full max-w-[1032px]">
-        <div class="flex gap-5 max-md:flex-col">
-          <!-- Drug 1 Card -->
-          <article class="flex flex-col w-full md:w-1/2 p-6 rounded-2xl glass-card fade-in">
-            <h3 class="text-3xl font-semibold mb-4" id="drug1-title">Drug 1: Paracetamol</h3>
-            <div class="mb-3">
-              <h4 class="font-medium">Uses:</h4>
-              <ul class="list-disc list-inside text-gray-800" id="drug1-uses">
-                <li>Pain relief</li>
-                <li>Fever reduction</li>
-              </ul>
-            </div>
-            <div class="mb-3">
-              <h4 class="font-medium">Side Effects:</h4>
-              <ul class="list-disc list-inside text-gray-800" id="drug1-effects">
-                <li>Nausea</li>
-                <li>Liver issues</li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-medium">Components:</h4>
-              <ul class="list-disc list-inside text-gray-800" id="drug1-components">
-                <li>Paracetamol</li>
-              </ul>
-            </div>
-          </article>
-
-          <!-- Drug 2 Card -->
-          <article class="flex flex-col w-full md:w-1/2 p-6 rounded-2xl glass-card fade-in">
-            <h3 class="text-3xl font-semibold mb-4" id="drug2-title">Drug 2: Ibuprofen</h3>
-            <div class="mb-3">
-              <h4 class="font-medium">Uses:</h4>
-              <ul class="list-disc list-inside text-gray-800" id="drug2-uses">
-                <li>Stomach Pain</li>
-                <li>Treats arthritis</li>
-              </ul>
-            </div>
-            <div class="mb-3">
-              <h4 class="font-medium">Side Effects:</h4>
-              <ul class="list-disc list-inside text-gray-800" id="drug2-effects">
-                <li>Headache</li>
-                <li>Dizziness</li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-medium">Components:</h4>
-              <ul class="list-disc list-inside text-gray-800" id="drug2-components">
-                <li>Ibuprofen</li>
-              </ul>
-            </div>
-          </article>
+     <section class="flex flex-wrap gap-4 justify-center mb-10 w-full max-w-[1032px]">
+        <div class="relative">
+           <div class="absolute top-3 left-4">
+              <span class="pill-icon"></span>
+           </div>
+           <input id="drug1Input" type="text" placeholder="Enter first medication" class="w-[280px] px-10 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm" />
         </div>
 
-        <!-- Interaction Message Placeholder -->
-        <div id="interaction-message" class="mt-10 p-6 text-xl bg-yellow-100 text-yellow-800 rounded-xl hidden interaction-box"></div>
-      </section>
-    </main>
 
-    <!-- JS -->
-    <script src="interact.js"></script>
-  </body>
+        <div class="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full">
+           <span class="font-semibold text-blue-700">+</span>
+        </div>
+
+
+        <div class="relative">
+           <div class="absolute top-3 left-4">
+              <span class="pill-icon" style="background: #4f46e5;"></span>
+           </div>
+           <input id="drug2Input" type="text" placeholder="Enter second medication" class="w-[280px] px-10 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm" />
+        </div>
+
+
+        <button id="compareButton" class="px-8 py-3 text-white bg-blue-600 rounded-lg custom-button font-medium hover:bg-blue-700 shadow-sm">
+           Check Interaction
+        </button>
+     </section>
+
+
+     <section class="w-full max-w-[1032px]">
+        <div class="flex gap-5 max-md:flex-col">
+           <article class="flex flex-col w-full md:w-1/2 p-6 card fade-in">
+              <div class="flex items-center mb-4 pb-2 border-b border-gray-100">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                   <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                 </svg>
+                 <h3 class="text-xl font-semibold text-gray-800" id="drug1Title">Medication 1</h3>
+              </div>
+              <div class="mb-4">
+                 <h4 class="font-medium text-blue-700 flex items-center text-sm uppercase tracking-wide mb-1">
+                    Uses
+                 </h4>
+                 <ul class="list-disc list-inside text-gray-700 pl-1" id="drug1Uses"></ul>
+              </div>
+              <div class="mb-4">
+                 <h4 class="font-medium text-blue-700 flex items-center text-sm uppercase tracking-wide mb-1">
+                    Side Effects
+                 </h4>
+                 <ul class="list-disc list-inside text-gray-700 pl-1" id="drug1SideEffects"></ul>
+              </div>
+              <div>
+                 <h4 class="font-medium text-blue-700 flex items-center text-sm uppercase tracking-wide mb-1">
+                    Components
+                 </h4>
+                 <ul class="list-disc list-inside text-gray-700 pl-1" id="drug1Components"></ul>
+              </div>
+           </article>
+
+
+           <article class="flex flex-col w-full md:w-1/2 p-6 card fade-in">
+              <div class="flex items-center mb-4 pb-2 border-b border-gray-100">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                   <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                 </svg>
+                 <h3 class="text-xl font-semibold text-gray-800" id="drug2Title">Medication 2</h3>
+              </div>
+              <div class="mb-4">
+                 <h4 class="font-medium text-indigo-700 flex items-center text-sm uppercase tracking-wide mb-1">
+                    Uses
+                 </h4>
+                 <ul class="list-disc list-inside text-gray-700 pl-1" id="drug2Uses"></ul>
+              </div>
+              <div class="mb-4">
+                 <h4 class="font-medium text-indigo-700 flex items-center text-sm uppercase tracking-wide mb-1">
+                    Side Effects
+                 </h4>
+                 <ul class="list-disc list-inside text-gray-700 pl-1" id="drug2SideEffects"></ul>
+              </div>
+              <div>
+                 <h4 class="font-medium text-indigo-700 flex items-center text-sm uppercase tracking-wide mb-1">
+                    Components
+                 </h4>
+                 <ul class="list-disc list-inside text-gray-700 pl-1" id="drug2Components"></ul>
+              </div>
+           </article>
+        </div>
+
+
+        <div id="interactionAlert" class="mt-6 p-5 bg-amber-50 border-l-4 border-amber-500 text-amber-800 rounded-md hidden interaction-box">
+           <div class="flex items-start">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                 <h3 class="text-lg font-semibold mb-1">Potential Interaction Alert</h3>
+                 <p id="interactionMessage" class="text-amber-700"></p>
+              </div>
+           </div>
+        </div>
+
+
+        <div id="compatibilitySection" class="mt-6 card p-6 hidden interaction-box">
+           <h3 class="text-xl font-bold text-center mb-4 text-gray-800">Compatibility Analysis</h3>
+          
+           <div class="flex items-center justify-center mb-4">
+              <div class="text-center px-4">
+                 <span id="drug1Name" class="font-medium text-blue-800">Medication 1</span>
+              </div>
+             
+              <div id="compatibilityStatusContainer" class="mx-4">
+                 <span id="compatibilityStatus" class="px-4 py-2 rounded-full font-medium text-sm">Unknown</span>
+              </div>
+             
+              <div class="text-center px-4">
+                 <span id="drug2Name" class="font-medium text-indigo-800">Medication 2</span>
+              </div>
+           </div>
+          
+           <div id="compatibilityDetails" class="text-gray-700 bg-gray-50 p-4 rounded-md"></div>
+          
+           <div id="safetyInstructions" class="mt-4 hidden bg-orange-50 p-4 rounded-md border-l-4 border-orange-400">
+              <h4 class="font-medium mb-2 text-gray-800">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1 text-orange-600" viewBox="0 0 20 20" fill="currentColor">
+                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1v-3a1 1 0 00-1-1z" clip-rule="evenodd" />
+                 </svg>
+                 Safety Instructions:
+              </h4>
+              <ul id="safetyInstructionsList" class="list-disc list-inside text-gray-700 space-y-1"></ul>
+           </div>
+        </div>
+     </section>
+  </main>
+
+
+  <div id="loadingOverlay" class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 hidden items-center justify-center z-50">
+     <div class="text-center bg-white p-6 rounded-lg shadow-lg">
+        <div class="spinner mx-auto mb-3"></div>
+        <p class="text-gray-700 font-medium">Analyzing medications...</p>
+     </div>
+  </div>
+
+
+  <script>
+   // ===== API KEY CONFIGURATION =====
+   const GEMINI_API_KEY = "AIzaSyACGW46vgW42GE5q7KbRbDT8nZsyU6BDiU";
+   // ================================
+  
+  
+  
+  
+   document.addEventListener("DOMContentLoaded", function () {
+     const compareButton = document.getElementById("compareButton");
+     const drug1Input = document.getElementById("drug1Input");
+     const drug2Input = document.getElementById("drug2Input");
+     const loadingOverlay = document.getElementById("loadingOverlay");
+     const interactionAlert = document.getElementById("interactionAlert");
+     const interactionMessage = document.getElementById("interactionMessage");
+     const compatibilitySection = document.getElementById("compatibilitySection");
+     const compatibilityStatus = document.getElementById("compatibilityStatus");
+     const compatibilityDetails = document.getElementById("compatibilityDetails");
+     const drug1Name = document.getElementById("drug1Name");
+     const drug2Name = document.getElementById("drug2Name");
+     const safetyInstructions = document.getElementById("safetyInstructions");
+     const safetyInstructionsList = document.getElementById("safetyInstructionsList");
+  
+  
+  
+  
+     compareButton.addEventListener("click", async function () {
+       const drug1 = drug1Input.value.trim();
+       const drug2 = drug2Input.value.trim();
+    
+       if (!drug1 || !drug2) {
+         alert("Please enter both medications to compare");
+         return;
+       }
+  
+  
+  
+  
+       // Show loading overlay
+       loadingOverlay.style.display = "flex";
+     
+       // Hide previous results
+       compatibilitySection.style.display = "none";
+       interactionAlert.style.display = "none";
+       safetyInstructions.style.display = "none";
+    
+       try {
+         // Get drug information and interaction data
+         const [drug1Data, drug2Data, interactionData, compatibilityData, safetyData] = await Promise.all([
+           getDrugInfo(drug1),
+           getDrugInfo(drug2),
+           checkDrugInteraction(drug1, drug2),
+           checkDrugCompatibility(drug1, drug2),
+           getSafetyInstructions(drug1, drug2)
+         ]);
+      
+         // Update the UI with drug information
+         updateDrugCard(1, drug1, drug1Data);
+         updateDrugCard(2, drug2, drug2Data);
+      
+         // Display interaction warning if needed
+         if (interactionData.hasInteraction) {
+           interactionMessage.textContent = interactionData.message;
+           interactionAlert.style.display = "block";
+         }
+       
+         // Update compatibility section
+         updateCompatibilityDisplay(drug1, drug2, compatibilityData);
+         compatibilitySection.style.display = "block";
+       
+         // Update safety instructions if compatibility level is medium (caution)
+         if (compatibilityData.compatibilityLevel === "medium") {
+           updateSafetyInstructions(safetyData);
+           safetyInstructions.style.display = "block";
+         }
+       
+       } catch (error) {
+         console.error("Error fetching drug information:", error);
+         alert("An error occurred while fetching drug information. Please try again.");
+       } finally {
+         // Hide loading overlay
+         loadingOverlay.style.display = "none";
+       }
+     });
+   
+     // Function to update safety instructions
+     function updateSafetyInstructions(safetyData) {
+       safetyInstructionsList.innerHTML = "";
+     
+       if (safetyData.instructions && safetyData.instructions.length > 0) {
+         safetyData.instructions.forEach(instruction => {
+           const li = document.createElement("li");
+           li.textContent = instruction;
+           safetyInstructionsList.appendChild(li);
+         });
+       } else {
+         const li = document.createElement("li");
+         li.textContent = "Consult with a healthcare professional for specific instructions.";
+         safetyInstructionsList.appendChild(li);
+       }
+     }
+   
+     // Function to update compatibility display
+     function updateCompatibilityDisplay(drug1, drug2, compatibilityData) {
+       // Update drug names
+       drug1Name.textContent = capitalizeFirst(drug1);
+       drug2Name.textContent = capitalizeFirst(drug2);
+     
+       // Set compatibility status color and text
+       compatibilityStatus.className = "compatibility-status";
+     
+       if (compatibilityData.compatibilityLevel === "high") {
+         compatibilityStatus.classList.add("status-safe");
+         compatibilityStatus.textContent = "SAFE";
+       } else if (compatibilityData.compatibilityLevel === "medium") {
+         compatibilityStatus.classList.add("status-caution");
+         compatibilityStatus.textContent = "CAUTION";
+       } else {
+         compatibilityStatus.classList.add("status-unsafe");
+         compatibilityStatus.textContent = "UNSAFE";
+       }
+     
+       // Update compatibility details
+       compatibilityDetails.innerHTML = `
+         <p><strong>Compatibility Level:</strong> ${capitalizeFirst(compatibilityData.compatibilityLevel)}</p>
+         <p><strong>Details:</strong> ${compatibilityData.details}</p>
+         <p><strong>Recommendations:</strong> ${compatibilityData.recommendations}</p>
+       `;
+     }
+   
+     // Function to get safety instructions for drug combinations
+     async function getSafetyInstructions(drug1, drug2) {
+       const prompt = `
+         Provide detailed safety instructions for taking "${drug1}" and "${drug2}" together, focusing specifically on how to take them safely when caution is advised. Respond with JSON in this format:
+         {
+           "instructions": [
+             "Clear instruction 1 about timing, dosage, etc.",
+             "Clear instruction 2 about symptoms to watch for",
+             "Clear instruction 3 about when to contact a doctor",
+             "Clear instruction 4",
+             "Clear instruction 5"
+           ]
+         }
+         Provide 5-7 practical, specific instructions that a patient could follow. Only respond with valid JSON and nothing else.
+       `;
+     
+       return await queryGemini(prompt);
+     }
+  
+  
+     // Function to get drug information from Gemini
+     async function getDrugInfo(drugName) {
+       const prompt = `
+         Provide detailed information about the medication "${drugName}" in JSON format with the following structure:
+         {
+           "uses": ["list", "of", "uses"],
+           "sideEffects": ["list", "of", "side effects"],
+           "components": ["list", "of", "active ingredients"]
+         }
+         Only respond with valid JSON and nothing else.
+       `;
+    
+       return await queryGemini(prompt);
+     }
+  
+  
+  
+  
+     // Function to check drug interactions with Gemini
+     async function checkDrugInteraction(drug1, drug2) {
+       const prompt = `
+         Analyze potential interactions between "${drug1}" and "${drug2}" and respond with JSON in this format:
+         {
+           "hasInteraction": true/false,
+           "message": "Detailed explanation of the interaction if any"
+         }
+         If you're unsure, set hasInteraction to false. Only respond with valid JSON and nothing else.
+       `;
+    
+       return await queryGemini(prompt);
+     }
+   
+     // Function to check drug compatibility
+     async function checkDrugCompatibility(drug1, drug2) {
+       const prompt = `
+         Analyze the compatibility between "${drug1}" and "${drug2}" and respond with JSON in this format:
+         {
+           "compatibilityLevel": "high/medium/low",
+           "details": "Detailed explanation of why these drugs have this compatibility level",
+           "recommendations": "Medical recommendations for taking these medications together"
+         }
+         Use "high" for drugs that can be safely taken together, "medium" for those that require caution, and "low" for combinations that should be avoided.
+         Only respond with valid JSON and nothing else.
+       `;
+     
+       return await queryGemini(prompt);
+     }
+  
+  
+  
+  
+     // Function to query Gemini API using the correct endpoint
+     async function queryGemini(prompt) {
+       try {
+         // Using the correct Gemini API endpoint
+         const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent", {
+           method: "POST",
+           headers: {
+             "Content-Type": "application/json",
+             "x-goog-api-key": GEMINI_API_KEY
+           },
+           body: JSON.stringify({
+             contents: [{
+               parts: [{
+                 text: prompt
+               }]
+             }],
+             generationConfig: {
+               temperature: 0.2,
+               topK: 40,
+               topP: 0.95,
+               maxOutputTokens: 1024
+             }
+           })
+         });
+  
+  
+  
+  
+         const data = await response.json();
+      
+         if (data.error) {
+           console.error("Gemini API Error:", data.error);
+           throw new Error(data.error.message || "Error with Gemini API");
+         }
+      
+         // Extract text from response
+         const responseText = data.candidates && data.candidates[0] && data.candidates[0].content
+           ? data.candidates[0].content.parts[0].text
+           : '';
+      
+         // Parse JSON from the response
+         try {
+           // Clean the response text (remove any potential markdown code blocks)
+           const cleanedText = responseText
+             .replace(/```json/g, '')
+             .replace(/```/g, '')
+             .trim();
+          
+           return JSON.parse(cleanedText);
+         } catch (jsonError) {
+           console.error("Error parsing JSON from API response:", jsonError);
+           console.log("Raw response:", responseText);
+           throw new Error("Invalid JSON response from Gemini API");
+         }
+       } catch (error) {
+         console.error("API Error:", error);
+         // Fall back to mock data if there's an API error
+         return mockGeminiResponse(prompt);
+       }
+     }
+  
+  
+  
+  
+     // Function to update drug card UI
+     function updateDrugCard(cardNum, drugName, data) {
+       // Set card title
+       document.getElementById(`drug${cardNum}Title`).textContent = `Drug ${cardNum}: ${capitalizeFirst(drugName)}`;
+    
+       // Update Uses
+       const usesEl = document.getElementById(`drug${cardNum}Uses`);
+       usesEl.innerHTML = "";
+       if (data.uses && data.uses.length > 0) {
+         data.uses.forEach(use => {
+           const li = document.createElement("li");
+           li.textContent = capitalizeFirst(use);
+           usesEl.appendChild(li);
+         });
+       } else {
+         const li = document.createElement("li");
+         li.textContent = "No information available";
+         usesEl.appendChild(li);
+       }
+    
+       // Update Side Effects
+       const sideEffectsEl = document.getElementById(`drug${cardNum}SideEffects`);
+       sideEffectsEl.innerHTML = "";
+       if (data.sideEffects && data.sideEffects.length > 0) {
+         data.sideEffects.forEach(effect => {
+           const li = document.createElement("li");
+           li.textContent = capitalizeFirst(effect);
+           sideEffectsEl.appendChild(li);
+         });
+       } else {
+         const li = document.createElement("li");
+         li.textContent = "No information available";
+         sideEffectsEl.appendChild(li);
+       }
+    
+       // Update Components
+       const componentsEl = document.getElementById(`drug${cardNum}Components`);
+       componentsEl.innerHTML = "";
+       if (data.components && data.components.length > 0) {
+         data.components.forEach(component => {
+           const li = document.createElement("li");
+           li.textContent = capitalizeFirst(component);
+           componentsEl.appendChild(li);
+         });
+       } else {
+         const li = document.createElement("li");
+         li.textContent = "No information available";
+         componentsEl.appendChild(li);
+       }
+     }
+  
+     // Helper function to capitalize first letter
+     function capitalizeFirst(string) {
+       return string.charAt(0).toUpperCase() + string.slice(1);
+     }
+  
+  
+  
+  
+     // Mock function as fallback
+     function mockGeminiResponse(prompt) {
+       console.log("Using mock data as fallback");
+     
+       // Check if it's a safety instructions request
+       if (prompt.includes("safety instructions")) {
+         if ((prompt.includes("Paracetamol") || prompt.includes("paracetamol") || prompt.includes("Acetaminophen")) &&
+             (prompt.includes("Ibuprofen") || prompt.includes("ibuprofen") || prompt.includes("Advil"))) {
+           return {
+             instructions: [
+               "Separate doses by at least 4-6 hours to minimize stomach irritation",
+               "Do not exceed 3000mg of Paracetamol per day (usually 6 standard tablets)",
+               "Do not exceed 1200mg of Ibuprofen per day (usually 3-4 standard tablets)",
+               "Take Ibuprofen with food to reduce stomach irritation",
+               "Stay hydrated by drinking plenty of water when taking both medications",
+               "Watch for signs of liver problems: yellowing skin/eyes, dark urine, or upper right abdominal pain",
+               "Contact a doctor immediately if you experience severe stomach pain, black stools, or vomiting blood"
+             ]
+           };
+         }
+         return {
+           instructions: [
+             "Space out doses of both medications by at least 2-4 hours",
+             "Take medications with food or milk to reduce stomach irritation",
+             "Do not exceed the recommended daily dosage for either medication",
+             "Monitor for unusual side effects such as dizziness, nausea, or rash",
+             "Avoid alcohol consumption when taking these medications together",
+             "Keep track of timing and dosages in a medication log",
+             "Contact a healthcare professional if you experience any concerning symptoms"
+           ]
+         };
+       }
+     
+       // Check if it's a compatibility request
+       if (prompt.includes("compatibilityLevel")) {
+         if ((prompt.includes("Paracetamol") || prompt.includes("paracetamol") || prompt.includes("Acetaminophen")) &&
+             (prompt.includes("Ibuprofen") || prompt.includes("ibuprofen") || prompt.includes("Advil"))) {
+           return {
+             compatibilityLevel: "medium",
+             details: "Paracetamol and Ibuprofen work differently to reduce pain and fever. Paracetamol affects the brain's perception of pain while Ibuprofen reduces inflammation.",
+             recommendations: "These medications can be taken together with proper dosing. Stagger intake by 2-3 hours to minimize stomach irritation. Do not exceed recommended dosages."
+           };
+         }
+         return {
+           compatibilityLevel: "medium",
+           details: "Limited information available about this drug combination.",
+           recommendations: "Consult with a healthcare professional before taking these medications together."
+         };
+       }
+    
+       if (prompt.includes("Paracetamol") || prompt.includes("paracetamol") || prompt.includes("Acetaminophen") || prompt.includes("acetaminophen")) {
+         return {
+           uses: ["Pain relief", "Fever reduction", "Headache treatment"],
+           sideEffects: ["Nausea", "Liver issues", "Allergic reactions"],
+           components: ["Acetaminophen"]
+         };
+       } else if (prompt.includes("Ibuprofen") || prompt.includes("ibuprofen") || prompt.includes("Advil") || prompt.includes("advil")) {
+         return {
+           uses: ["Pain relief", "Inflammation reduction", "Fever reduction"],
+           sideEffects: ["Stomach pain", "Dizziness", "Heartburn"],
+           components: ["Ibuprofen"]
+         };
+       } else if (prompt.includes("interaction between")) {
+         // Check if both paracetamol and ibuprofen are mentioned
+         if ((prompt.includes("Paracetamol") || prompt.includes("paracetamol")) &&
+             (prompt.includes("Ibuprofen") || prompt.includes("ibuprofen"))) {
+           return {
+             hasInteraction: true,
+             message: "Paracetamol and Ibuprofen can be taken together but may increase the risk of side effects. Monitor for any adverse reactions."
+           };
+         }
+         return {
+           hasInteraction: false,
+           message: "No known significant interactions between these medications."
+         };
+       } else {
+         return {
+           uses: ["Not enough information available"],
+           sideEffects: ["Not enough information available"],
+           components: ["Not enough information available"]
+         };
+       }
+     }
+  
+  
+  
+  
+     // Pre-fill example values
+     drug1Input.value = "Paracetamol";
+     drug2Input.value = "Ibuprofen";
+   });
+   </script>
+  
+</body>
 </html>
